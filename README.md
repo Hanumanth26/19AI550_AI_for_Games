@@ -1,67 +1,57 @@
-# Ex.No: 9 Implementation of Alpha Beta Pruning 
-#### Date: 04.10.2024                                                                      
-#### Register Number : 212222240016
 
-### Aim: 
-Write a Alpha beta pruning algorithm to find the optimal value of MAX Player from the given graph.
+# Ex.No: 10 Implementation of Negamax algorithm 
 
-### Algorithm:
+#### DATE: 18.10.2024
+#### REGISTER NUMBER : 212222240016
+### AIM:
+
+Write a negamax algorithm to find the optimal value of Player from the graph.
+
+### ALGORITHM:
+
 1. Start the program
-2. Initially  assign MAX and MIN value as 1000 and -1000.
-3. Define the minimax function  using alpha beta pruning
-4. If maximum depth is reached then return the score value of leaf node. [depth taken as 3]
-5. In Max player turn, assign the alpha value by finding the maximum value by calling the minmax function recursively.
-6. In Min player turn, assign beta value by finding the minimum value by calling the minmax function recursively.
-7. Specify the score value of leaf nodes and Call the minimax function.
-8. Print the best value of Max player.
-9. Stop the program. 
-z
-### Program:
-```py
-# Define a large negative and positive value to represent infinity
-INF = float('inf')
 
-# Alpha-Beta Pruning function
-def alpha_beta_pruning(depth, node_index, maximizing_player, values, alpha, beta):
-    # Base case: leaf node is reached
-    if depth == 3:
-        return values[node_index]
-    
-    if maximizing_player:
-        max_eval = -INF
-        # Recur for the two children of the current node
-        for i in range(2):
-            eval = alpha_beta_pruning(depth + 1, node_index * 2 + i, False, values, alpha, beta)
-            max_eval = max(max_eval, eval)
-            alpha = max(alpha, eval)
-            
-            # Prune the branch
-            if beta <= alpha:
-                break
-        return max_eval
-    else:
-        min_eval = INF
-        # Recur for the two children of the current node
-        for i in range(2):
-            eval = alpha_beta_pruning(depth + 1, node_index * 2 + i, True, values, alpha, beta)
-            min_eval = min(min_eval, eval)
-            beta = min(beta, eval)
-            
-            # Prune the branch
-            if beta <= alpha:
-                break
-        return min_eval
+2. Define the minimax function
+
+3. If maximum depth is reached then return the score value of leaf node. [depth taken as 3]
+
+4. In Max player turn, assign the  maximum value by calling the negamax function recursively.
+
+5. In Min player turn, finding the maximum value by taking the negation of its children.
+
+6. Specify the score value of leaf nodes and Call the negamax function.
+
+7. Print the best value of Max player.
+
+8. Stop the program.
+
+### PROGRAM:
+
+```py
+import math
+
+def negamax(curDepth, nodeIndex, scores, targetDepth):
+    # Base case: target depth reached
+    if curDepth == targetDepth:
+        return scores[nodeIndex]
+
+    # Negamax assumes max turn is represented by positive values
+    value1 = negamax(curDepth + 1, nodeIndex * 2, scores, targetDepth)
+    value2 = negamax(curDepth + 1, nodeIndex * 2 + 1, scores, targetDepth)
+
+    return max(-value1, -value2)  # Flip the sign for the other player's turn
 
 # Driver code
-if _name_ == "_main_":
-    # This is the terminal/leaf node values of the game tree
-    values = [3, 5, 6, 9, 1, 2, 0, -1]
+scores = [3, 5, 2, 9, 12, 5, 23, 20]
+treeDepth = math.log(len(scores), 2)  # Calculate depth of node, log(8, base 2) = 3
+print("The optimal value is: ", end="")
+print(negamax(0, 0, scores, int(treeDepth)))
 
-    print("Optimal value:", alpha_beta_pruning(0, 0, True, values, -INF, INF))
 ```
+### OUTPUT:
 
-### Output:
-![image](https://github.com/user-attachments/assets/168d6858-ef17-4a66-aa4d-27af2c110cf4)
+![image](https://github.com/user-attachments/assets/97f10fde-2107-4ad2-9a4d-ab134981c069)
 
-### Result:
-Thus the best score of max player was found using Alpha Beta Pruning.
+
+### RESULT:
+Thus the best score of max player was found using negamax algorithm
